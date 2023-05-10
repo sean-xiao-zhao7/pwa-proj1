@@ -1,0 +1,32 @@
+{
+    "name": "Progressive Web App - Project 1",
+    "short_name": "PWA - Proj1",
+    "start_url": "/index.html",
+    "scope": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#3F51B5",
+    "description": "Number 1 project of the Progressive Web Applications course.",
+    "dir": "ltr",
+    "lang": "en-US",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/src/images/icons/app-icon-48x48.png",
+            "type": "image/png",
+            "sizes": "48x48"
+        },
+        {
+            "src": "/src/images/icons/app-icon-96x96.png",
+            "type": "image/png",
+            "sizes": "96x96"
+        }
+    ],
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "",
+            "id": "com.sopias.pwa-proj1"
+        }
+    ]
+}
