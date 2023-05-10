@@ -1,6 +1,7 @@
 {
     "name": "Progressive Web App - Project 1",
     "short_name": "PWA - Proj1",
+    "id": "/index.html",
     "start_url": "/index.html",
     "scope": ".",
     "display": "standalone",
