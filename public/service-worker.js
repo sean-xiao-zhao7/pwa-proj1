@@ -2,6 +2,8 @@ self.addEventListener("install", (event) => {
     // console.log("Service worker installing - ", event);
     event.waitUntil(
         caches.open("staticFiles").then((cache) => {
+            cache.add("/");
+            cache.add("/index.html");
             cache.add("/src/js/app.js");
         })
     );
