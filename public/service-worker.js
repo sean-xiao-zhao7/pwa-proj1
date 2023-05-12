@@ -11,6 +11,10 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(fetch(event.request));
 });
 
+fetch("https://httpbin.org/get").then((res) => {
+    
+});
+
 // template
 // self.addEventListener("fetch", (event) => {
 
