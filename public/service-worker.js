@@ -1,7 +1,7 @@
 self.addEventListener("install", (event) => {
     // console.log("Service worker installing - ", event);
     event.waitUntil(
-        caches.open("staticFiles").then((cache) => {
+        caches.open("staticFiles-v2").then((cache) => {
             cache.addAll([
                 "/",
                 "/index.html",
@@ -41,9 +41,7 @@ self.addEventListener("fetch", (event) => {
                             return res2;
                         });
                     })
-                    .catch((err) => {
-                        
-                    });
+                    .catch((err) => {});
             }
         })
     );
