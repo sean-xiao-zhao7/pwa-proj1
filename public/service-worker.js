@@ -24,6 +24,17 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
     // console.log("Service worker activating - ", event);
+    event.waitUntil(
+        caches.keys().then((keys) => {
+            return Promise.all(
+                keys.map((key) => {
+                    if (key != "staticFiles-v2" && key !== "dynamicRequests") {
+                        caches.delete(key);
+                    }
+                })
+            );
+        })
+    );
     return self.clients.claim();
 });
 
