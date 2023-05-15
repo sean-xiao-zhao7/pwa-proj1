@@ -1,7 +1,10 @@
+let staticFilesVersion = "staticFiles-v3";
+let dynamicRequestsVersion = "dynamicRequests-v2";
+
 self.addEventListener("install", (event) => {
     // console.log("Service worker installing - ", event);
     event.waitUntil(
-        caches.open("staticFiles-v2").then((cache) => {
+        caches.open(staticFilesVersion).then((cache) => {
             cache.addAll([
                 "/",
                 "/index.html",
@@ -28,7 +31,10 @@ self.addEventListener("activate", (event) => {
         caches.keys().then((keys) => {
             return Promise.all(
                 keys.map((key) => {
-                    if (key != "staticFiles-v2" && key !== "dynamicRequests") {
+                    if (
+                        key != staticFilesVersion &&
+                        key !== dynamicRequestsVersion
+                    ) {
                         caches.delete(key);
                     }
                 })
@@ -47,10 +53,12 @@ self.addEventListener("fetch", (event) => {
             } else {
                 return fetch(event.request)
                     .then((res2) => {
-                        return caches.open("dynamicRequests").then((cache) => {
-                            cache.put(event.request.url, res2.clone());
-                            return res2;
-                        });
+                        return caches
+                            .open(dynamicRequestsVersion)
+                            .then((cache) => {
+                                cache.put(event.request.url, res2.clone());
+                                return res2;
+                            });
                     })
                     .catch((err) => {});
             }
