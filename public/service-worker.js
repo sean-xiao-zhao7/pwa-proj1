@@ -1,5 +1,5 @@
-let staticFilesVersion = "staticFiles-v8";
-let dynamicRequestsVersion = "dynamicRequests-v6";
+let staticFilesVersion = "staticFiles-v9";
+let dynamicRequestsVersion = "dynamicRequests-v8";
 
 self.addEventListener("install", (event) => {
     event.waitUntil(
@@ -9,6 +9,7 @@ self.addEventListener("install", (event) => {
                 "/index.html",
                 "/manifest.json",
                 "/favicon.ico",
+                "/404.html",
                 "/src/js/feed.js",
                 "/src/js/material.min.js",
                 "/src/js/app.js",
@@ -73,7 +74,9 @@ self.addEventListener("fetch", (event) => {
                         })
                         .catch((err) => {
                             console.log(err);
-                            return caches.match("/404.html");
+                            if (event.request.url.indexOf("/help")) {
+                                return caches.match("/404.html");
+                            }
                         });
                 }
             })
