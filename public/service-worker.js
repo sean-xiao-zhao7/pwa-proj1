@@ -1,8 +1,7 @@
 let staticFilesVersion = "staticFiles-v6";
-let dynamicRequestsVersion = "dynamicRequests-v3";
+let dynamicRequestsVersion = "dynamicRequests-v4";
 
 self.addEventListener("install", (event) => {
-    // console.log("Service worker installing - ", event);
     event.waitUntil(
         caches.open(staticFilesVersion).then((cache) => {
             cache.addAll([
@@ -26,7 +25,6 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-    // console.log("Service worker activating - ", event);
     event.waitUntil(
         caches.keys().then((keys) => {
             return Promise.all(
@@ -47,9 +45,15 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
     event.respondWith(
         caches.open(dynamicRequestsVersion).then((cache) => {
-            return fetch(event.request).then((res) => {
-                cache.put(event.request, res.clone());
-                return res;
+            return cache.match(event.request).then((res) => {
+                if (res) {
+                    return res;
+                } else {
+                    return fetch(event.request).then((res2) => {
+                        cache.put(event.request, res2.clone());
+                        return res2;
+                    });
+                }
             });
         })
     );
