@@ -45,30 +45,23 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-    // event.respondWith(fetch(event.request));
-    event.respondWith(
-        caches.match(event.request).then((res) => {
-            if (res) {
-                return res;
-            } else {
-                return fetch(event.request)
-                    .then((res2) => {
-                        return caches
-                            .open(dynamicRequestsVersion)
-                            .then((cache) => {
-                                cache.put(event.request.url, res2.clone());
-                                return res2;
-                            });
-                    })
-                    .catch((err) => {});
-            }
-        })
-    );
+    event.respondWith(fetch(event.request));
+    // event.respondWith(
+    //     caches.match(event.request).then((res) => {
+    //         if (res) {
+    //             return res;
+    //         } else {
+    //             return fetch(event.request)
+    //                 .then((res2) => {
+    //                     return caches
+    //                         .open(dynamicRequestsVersion)
+    //                         .then((cache) => {
+    //                             cache.put(event.request.url, res2.clone());
+    //                             return res2;
+    //                         });
+    //                 })
+    //                 .catch((err) => {});
+    //         }
+    //     })
+    // );
 });
-
-fetch("https://httpbin.org/get").then((res) => {});
-
-// template
-// self.addEventListener("fetch", (event) => {
-
-// });
