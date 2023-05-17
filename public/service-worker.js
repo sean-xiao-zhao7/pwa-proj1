@@ -1,5 +1,5 @@
-let staticFilesVersion = "staticFiles-v6";
-let dynamicRequestsVersion = "dynamicRequests-v4";
+let staticFilesVersion = "staticFiles-v8";
+let dynamicRequestsVersion = "dynamicRequests-v6";
 
 self.addEventListener("install", (event) => {
     event.waitUntil(
@@ -43,18 +43,40 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-    event.respondWith(
-        caches.open(dynamicRequestsVersion).then((cache) => {
-            return cache.match(event.request).then((res) => {
-                if (res) {
-                    return res;
+    const cardUrl = "https://httpbin.org/get";
+    if (event.request.url.indexOf(cardUrl) > -1) {
+        event.respondWith(
+            caches.open(dynamicRequestsVersion).then((cache) => {
+                return fetch(event.request).then((res2) => {
+                    cache.put(event.request, res2.clone());
+                    return res2;
+                });
+            })
+        );
+    } else {
+        event.respondWith(
+            caches.match(event.request).then((cachedRes) => {
+                if (cachedRes) {
+                    return cachedRes;
                 } else {
-                    return fetch(event.request).then((res2) => {
-                        cache.put(event.request, res2.clone());
-                        return res2;
-                    });
+                    return fetch(event.request)
+                        .then((res) => {
+                            return caches
+                                .open(dynamicRequestsVersion)
+                                .then((dynamicCache) => {
+                                    dynamicCache.put(
+                                        event.request,
+                                        res.clone()
+                                    );
+                                    return res;
+                                });
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            return caches.match("/404.html");
+                        });
                 }
-            });
-        })
-    );
+            })
+        );
+    }
 });
