@@ -1,5 +1,18 @@
-let staticFilesVersion = "staticFiles-v9";
-let dynamicRequestsVersion = "dynamicRequests-v8";
+let staticFilesVersion = "staticFiles-v11";
+let dynamicRequestsVersion = "dynamicRequests-v10";
+const cacheOnlyReqs = [
+    "/index.html",
+    "/manifest.json",
+    "/favicon.ico",
+    "/404.html",
+    "/src/js/feed.js",
+    "/src/js/material.min.js",
+    "/src/js/app.js",
+    "/src/css/app.css",
+    "/src/css/feed.css",
+    "/src/css/help.css",
+    "/src/images/main-image.jpg",
+];
 
 self.addEventListener("install", (event) => {
     event.waitUntil(
@@ -46,6 +59,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
     const cardUrl = "https://httpbin.org/get";
     if (event.request.url.indexOf(cardUrl) > -1) {
+        // cache then network with dynamic caching
         event.respondWith(
             caches.open(dynamicRequestsVersion).then((cache) => {
                 return fetch(event.request).then((res2) => {
@@ -54,7 +68,13 @@ self.addEventListener("fetch", (event) => {
                 });
             })
         );
+    } else if (
+        cacheOnlyReqs.some((reqStr) => event.request.url.includes(reqStr))
+    ) {
+        // cache only
+        event.respondWith(caches.match(event.request));
     } else {
+        // cache with network fallback
         event.respondWith(
             caches.match(event.request).then((cachedRes) => {
                 if (cachedRes) {
