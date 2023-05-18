@@ -1,5 +1,5 @@
 let staticFilesVersion = "staticFiles-v11";
-let dynamicRequestsVersion = "dynamicRequests-v10";
+let dynamicRequestsVersion = "dynamicRequests-v11";
 const cacheOnlyReqs = [
     "/index.html",
     "/manifest.json",
@@ -94,7 +94,11 @@ self.addEventListener("fetch", (event) => {
                         })
                         .catch((err) => {
                             console.log(err);
-                            if (event.request.url.indexOf("/help")) {
+                            if (
+                                event.request.headers
+                                    .get("accept")
+                                    .includes("text/html")
+                            ) {
                                 return caches.match("/404.html");
                             }
                         });
