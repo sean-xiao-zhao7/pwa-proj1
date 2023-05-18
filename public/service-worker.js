@@ -1,5 +1,5 @@
 let staticFilesVersion = "staticFiles-v11";
-let dynamicRequestsVersion = "dynamicRequests-v11";
+let dynamicRequestsVersion = "dynamicRequests-v12";
 const cacheOnlyReqs = [
     "/index.html",
     "/manifest.json",
@@ -100,6 +100,12 @@ self.addEventListener("fetch", (event) => {
                                     .includes("text/html")
                             ) {
                                 return caches.match("/404.html");
+                            } else if (
+                                event.request.headers
+                                    .get("accept")
+                                    .includes("image")
+                            ) {
+                                return caches.match("/favicon.ico");
                             }
                         });
                 }
