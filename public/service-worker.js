@@ -1,4 +1,4 @@
-let staticFilesVersion = "staticFiles-v12";
+let staticFilesVersion = "staticFiles-v14";
 let dynamicRequestsVersion = "dynamicRequests-v14";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
