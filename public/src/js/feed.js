@@ -1,3 +1,5 @@
+const serviceWorkerName = "service-worker";
+
 var shareImageButton = document.querySelector("#share-image-button");
 var createPostArea = document.querySelector("#create-post");
 var closeCreatePostModalButton = document.querySelector(
@@ -21,6 +23,14 @@ function openCreatePostModal() {
         });
 
         deferredPrompt = null;
+    }
+
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+            .getRegistration(serviceWorkerName)
+            .then((sw) => {
+                sw.unregister();
+            });
     }
 }
 
