@@ -98,7 +98,6 @@ self.addEventListener("fetch", (event) => {
                             return caches
                                 .open(dynamicRequestsVersion)
                                 .then((dynamicCache) => {
-                                    trimCache();
                                     dynamicCache.put(
                                         event.request,
                                         res.clone()
