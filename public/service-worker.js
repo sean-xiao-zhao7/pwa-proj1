@@ -1,5 +1,6 @@
 let staticFilesVersion = "staticFiles-v11";
-let dynamicRequestsVersion = "dynamicRequests-v12";
+let dynamicRequestsVersion = "dynamicRequests-v14";
+const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
     "/index.html",
     "/manifest.json",
@@ -14,19 +15,16 @@ const cacheOnlyReqs = [
     "/src/images/main-image.jpg",
 ];
 
-const trimCache = (cacheName, maxItems) => {
-    caches
-        .open(cacheName)
-        .then((cache) => {
-            return cache.keys();
-        })
-        .then((keys) => {
-            if (keys.length > maxItems) {
+const trimCache = (cacheName = dynamicRequestsVersion) => {
+    caches.open(cacheName).then((cache) => {
+        cache.keys().then((keys) => {
+            if (keys.length > dynamicCacheMaxItems) {
                 cache
                     .delete(keys[0])
-                    .then(() => trimCache(cacheName, maxItems));
+                    .then(() => trimCache(cacheName, dynamicCacheMaxItems));
             }
         });
+    });
 };
 
 self.addEventListener("install", (event) => {
@@ -100,6 +98,7 @@ self.addEventListener("fetch", (event) => {
                             return caches
                                 .open(dynamicRequestsVersion)
                                 .then((dynamicCache) => {
+                                    trimCache();
                                     dynamicCache.put(
                                         event.request,
                                         res.clone()
