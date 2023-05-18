@@ -14,6 +14,21 @@ const cacheOnlyReqs = [
     "/src/images/main-image.jpg",
 ];
 
+const trimCache = (cacheName, maxItems) => {
+    caches
+        .open(cacheName)
+        .then((cache) => {
+            return cache.keys();
+        })
+        .then((keys) => {
+            if (keys.length > maxItems) {
+                cache
+                    .delete(keys[0])
+                    .then(() => trimCache(cacheName, maxItems));
+            }
+        });
+};
+
 self.addEventListener("install", (event) => {
     event.waitUntil(
         caches.open(staticFilesVersion).then((cache) => {
