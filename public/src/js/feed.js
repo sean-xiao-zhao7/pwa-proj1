@@ -19,39 +19,42 @@ shareImageButton.addEventListener("click", openCreatePostModal);
 
 closeCreatePostModalButton.addEventListener("click", closeCreatePostModal);
 
-function createCard() {
-    var cardWrapper = document.createElement("div");
-    cardWrapper.className = "shared-moment-card mdl-card mdl-shadow--2dp";
-    var cardTitle = document.createElement("div");
-    cardTitle.className = "mdl-card__title";
-    cardTitle.style.backgroundImage = 'url("/src/images/sf-boat.jpg")';
-    cardTitle.style.backgroundSize = "cover";
-    cardTitle.style.height = "180px";
-    cardWrapper.appendChild(cardTitle);
-    var cardTitleTextElement = document.createElement("h2");
-    cardTitleTextElement.className = "mdl-card__title-text";
-    cardTitleTextElement.textContent = "San Francisco Trip";
-    cardTitle.appendChild(cardTitleTextElement);
-    var cardSupportingText = document.createElement("div");
-    cardSupportingText.className = "mdl-card__supporting-text";
-    cardSupportingText.textContent = "In San Francisco";
-    cardSupportingText.style.textAlign = "center";
-    cardWrapper.appendChild(cardSupportingText);
-    componentHandler.upgradeElement(cardWrapper);
-    sharedMomentsArea.appendChild(cardWrapper);
+function createCard(data) {
+    for (const post of data) {
+        var cardWrapper = document.createElement("div");
+        cardWrapper.className = "shared-moment-card mdl-card mdl-shadow--2dp";
+        var cardTitle = document.createElement("div");
+        cardTitle.className = "mdl-card__title";
+        cardTitle.style.backgroundSize = "cover";
+        cardTitle.style.height = "180px";
+        cardTitle.style.background = "test.jpg";
+        console.log(cardTitle.style);
+        cardWrapper.appendChild(cardTitle);
+        var cardTitleTextElement = document.createElement("h2");
+        cardTitleTextElement.className = "mdl-card__title-text";
+        cardTitleTextElement.textContent = post.location;
+        cardTitle.appendChild(cardTitleTextElement);
+        var cardSupportingText = document.createElement("div");
+        cardSupportingText.className = "mdl-card__supporting-text";
+        cardSupportingText.textContent = post.name;
+        cardSupportingText.style.textAlign = "center";
+        cardWrapper.appendChild(cardSupportingText);
+        componentHandler.upgradeElement(cardWrapper);
+        sharedMomentsArea.appendChild(cardWrapper);
+    }
 }
 
-const cardUrl = "https://pwa2-e7438-default-rtdb.firebaseio.com/";
+const cardUrl = "https://pwa2-e7438-default-rtdb.firebaseio.com/posts.json";
 let finished = false;
 
 fetch(cardUrl)
     .then(function (res) {
         return res.json();
     })
-    .then(function (_) {
+    .then(function (data) {
         if (!finished) {
             finished = true;
-            createCard();
+            createCard(Object.values(data));
         }
     });
 
@@ -63,10 +66,10 @@ if ("caches" in window) {
                 return res.json();
             }
         })
-        .then((_) => {
+        .then((data) => {
             if (!finished) {
                 finished = true;
-                createCard();
+                createCard(Object.values(data));
             }
         });
 }

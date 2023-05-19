@@ -1,4 +1,4 @@
-let staticFilesVersion = "staticFiles-v14";
+let staticFilesVersion = "staticFiles-v15";
 let dynamicRequestsVersion = "dynamicRequests-v14";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
@@ -70,7 +70,7 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-    const cardUrl = "https://httpbin.org/get";
+    const cardUrl = "https://pwa2-e7438-default-rtdb.firebaseio.com/posts.json";
     if (event.request.url.indexOf(cardUrl) > -1) {
         // cache then network with dynamic caching
         event.respondWith(
