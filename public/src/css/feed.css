@@ -32,5 +32,6 @@
 
 .shared-moment-card {
     margin-bottom: 1em;
-    width: auto;
+    text-align: center;
+    color: white;
 }
