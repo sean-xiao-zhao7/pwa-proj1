@@ -30,7 +30,6 @@ function createCard(data) {
         cardTitle.style.backgroundSize = "auto";
         cardTitle.style.backgroundRepeat = "no-repeat";
         cardTitle.style.backgroundPosition = "center";
-        console.log(post.imageUrl);
         cardWrapper.appendChild(cardTitle);
         var cardTitleTextElement = document.createElement("h2");
         cardTitleTextElement.className = "mdl-card__title-text";

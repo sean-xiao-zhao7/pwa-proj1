@@ -1,7 +1,7 @@
-import { openDB, deleteDB, wrap, unwrap } from "idb";
+const idb = require("idb");
 
 let staticFilesVersion = "staticFiles-v15";
-let dynamicRequestsVersion = "dynamicRequests-v14";
+let dynamicRequestsVersion = "dynamicRequests-v16";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
     "/index.html",
@@ -97,20 +97,10 @@ self.addEventListener("fetch", (event) => {
                 } else {
                     return fetch(event.request)
                         .then((res) => {
-                            return caches
-                                .open(dynamicRequestsVersion)
-                                .then((dynamicCache) => {
-                                    return openDB("dynamicIdbCache").then(
-                                        (idb) => {
-                                            idb.put(
-                                                "keyval",
-                                                res.clone(),
-                                                event.request
-                                            );
-                                            return res;
-                                        }
-                                    );
-                                });
+                            return idb.openDB("dynamicIdbCache").then((idb) => {
+                                idb.put("keyval", res.clone(), event.request);
+                                return res;
+                            });
                         })
                         .catch((err) => {
                             console.log(err);
