@@ -1,6 +1,6 @@
 importScripts("https://cdn.jsdelivr.net/npm/idb@7/build/umd.js");
 
-let staticFilesVersion = "staticFiles-v29";
+let staticFilesVersion = "staticFiles-v32";
 let dynamicRequestsVersion = "dynamicRequests-v20";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
@@ -44,6 +44,17 @@ const trimCache = (cacheName = dynamicRequestsVersion) => {
         });
     });
 };
+const addToIDB = (res) => {
+    const resClone = res.clone();
+    resClone.json().then((result) => {
+        for (const post of Object.values(result)) {
+            postsIdb.then((dbInstance) => {
+                dbInstance.put("posts", post);
+            });
+        }
+    });
+    return res;
+};
 
 self.addEventListener("install", (event) => {
     event.waitUntil(
@@ -77,15 +88,7 @@ self.addEventListener("fetch", (event) => {
         // cache then network with dynamic caching
         event.respondWith(
             fetch(event.request).then((res) => {
-                const resClone = res.clone();
-                resClone.json().then((result) => {
-                    for (const post of Object.values(result)) {
-                        postsIdb.then((dbInstance) => {
-                            dbInstance.add(post);
-                        });
-                    }
-                });
-                return res;
+                return addToIDB(res);
             })
         );
     } else if (
@@ -102,14 +105,7 @@ self.addEventListener("fetch", (event) => {
                 } else {
                     return fetch(event.request)
                         .then((res) => {
-                            return postsIdb.then((result) => {
-                                result.put(
-                                    "keyval",
-                                    res.clone(),
-                                    event.request
-                                );
-                                return res;
-                            });
+                            return addToIDB(res);
                         })
                         .catch((err) => {
                             console.log(err);
