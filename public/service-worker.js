@@ -1,4 +1,4 @@
-let staticFilesVersion = "staticFiles-v18";
+let staticFilesVersion = "staticFiles-v20";
 let dynamicRequestsVersion = "dynamicRequests-v19";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
@@ -9,17 +9,12 @@ const cacheOnlyReqs = [
     "/404.html",
     "/src/js/app.js",
     "/src/js/feed.js",
-    "/src/js/fetch_polyfill.js",
-    "/src/js/promise_polyfill.js",
     "/src/js/material.min.js",
     "/src/css/app.css",
     "/src/css/feed.css",
     "/src/css/help.css",
     "/src/images/main-image.jpg",
     "https://fonts.googleapis.com/css?family=Roboto:400,700",
-    "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
-    "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
-    "https://fonts.googleapis.com/icon?family=Material+Icons",
     "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
     "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
 ];
@@ -56,15 +51,15 @@ self.addEventListener("install", (event) => {
                 "/src/js/promise_polyfill.js",
                 "/src/js/material.min.js",
                 "/src/css/app.css",
-                "/src/css/feed.css",
-                "/src/css/help.css",
-                "/src/images/main-image.jpg",
-                "https://fonts.googleapis.com/css?family=Roboto:400,700",
-                "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
-                "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
-                "https://fonts.googleapis.com/icon?family=Material+Icons",
-                "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
-                "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
+                // "/src/css/feed.css",
+                // "/src/css/help.css",
+                // "/src/images/main-image.jpg",
+                // "https://fonts.googleapis.com/css?family=Roboto:400,700",
+                // "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
+                // "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
+                // "https://fonts.googleapis.com/icon?family=Material+Icons",
+                // "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
+                // "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
             ]);
         })
     );
