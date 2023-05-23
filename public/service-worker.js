@@ -1,3 +1,5 @@
+import { openDB, deleteDB, wrap, unwrap } from "idb";
+
 let staticFilesVersion = "staticFiles-v15";
 let dynamicRequestsVersion = "dynamicRequests-v14";
 const dynamicCacheMaxItems = 5;
@@ -98,11 +100,16 @@ self.addEventListener("fetch", (event) => {
                             return caches
                                 .open(dynamicRequestsVersion)
                                 .then((dynamicCache) => {
-                                    dynamicCache.put(
-                                        event.request,
-                                        res.clone()
+                                    return openDB("dynamicIdbCache").then(
+                                        (idb) => {
+                                            idb.put(
+                                                "keyval",
+                                                res.clone(),
+                                                event.request
+                                            );
+                                            return res;
+                                        }
                                     );
-                                    return res;
                                 });
                         })
                         .catch((err) => {
