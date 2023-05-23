@@ -1,4 +1,4 @@
-let staticFilesVersion = "staticFiles-v20";
+let staticFilesVersion = "staticFiles-v22";
 let dynamicRequestsVersion = "dynamicRequests-v19";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
@@ -9,21 +9,20 @@ const cacheOnlyReqs = [
     "/404.html",
     "/src/js/app.js",
     "/src/js/feed.js",
+    "/src/js/fetch_polyfill.js",
+    "/src/js/promise_polyfill.js",
     "/src/js/material.min.js",
     "/src/css/app.css",
     "/src/css/feed.css",
     "/src/css/help.css",
     "/src/images/main-image.jpg",
     "https://fonts.googleapis.com/css?family=Roboto:400,700",
+    "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
+    "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
+    "https://fonts.googleapis.com/icon?family=Material+Icons",
     "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
     "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
 ];
-const myIdb = idb.openDB("dynamicIdbCache", 1, {
-    upgrade(db) {
-        db.createObjectStore("keyval", { keyPath: "id" });
-    },
-});
-
 const trimCache = (cacheName = dynamicRequestsVersion) => {
     caches.open(cacheName).then((cache) => {
         cache.keys().then((keys) => {
@@ -39,28 +38,7 @@ const trimCache = (cacheName = dynamicRequestsVersion) => {
 self.addEventListener("install", (event) => {
     event.waitUntil(
         caches.open(staticFilesVersion).then((cache) => {
-            cache.addAll([
-                "/",
-                "/index.html",
-                "/manifest.json",
-                "/favicon.ico",
-                "/404.html",
-                "/src/js/app.js",
-                "/src/js/feed.js",
-                "/src/js/fetch_polyfill.js",
-                "/src/js/promise_polyfill.js",
-                "/src/js/material.min.js",
-                "/src/css/app.css",
-                // "/src/css/feed.css",
-                // "/src/css/help.css",
-                // "/src/images/main-image.jpg",
-                // "https://fonts.googleapis.com/css?family=Roboto:400,700",
-                // "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
-                // "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
-                // "https://fonts.googleapis.com/icon?family=Material+Icons",
-                // "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
-                // "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
-            ]);
+            cache.addAll(cacheOnlyReqs);
         })
     );
 });
@@ -109,14 +87,22 @@ self.addEventListener("fetch", (event) => {
                 } else {
                     return fetch(event.request)
                         .then((res) => {
-                            return myIdb.then((result) => {
-                                result.put(
-                                    "keyval",
-                                    res.clone(),
-                                    event.request
-                                );
-                                return res;
-                            });
+                            return idb
+                                .openDB("dynamicIdbCache", 1, {
+                                    upgrade(db) {
+                                        db.createObjectStore("keyval", {
+                                            keyPath: "id",
+                                        });
+                                    },
+                                })
+                                .then((result) => {
+                                    result.put(
+                                        "keyval",
+                                        res.clone(),
+                                        event.request
+                                    );
+                                    return res;
+                                });
                         })
                         .catch((err) => {
                             console.log(err);

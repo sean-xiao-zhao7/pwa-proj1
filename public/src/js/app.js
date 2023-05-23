@@ -8,7 +8,7 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker
         .register("/service-worker.js")
         .then(() => {
-            console.log("Service worker registered.");
+            // console.log("Service worker registered.");
         })
         .catch((err) => {
             alert("Error registering servier worker. Check console log.");
