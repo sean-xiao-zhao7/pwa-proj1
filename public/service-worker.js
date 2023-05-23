@@ -1,6 +1,4 @@
-const idb = require("idb");
-
-let staticFilesVersion = "staticFiles-v15";
+let staticFilesVersion = "staticFiles-v16";
 let dynamicRequestsVersion = "dynamicRequests-v16";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
@@ -15,6 +13,7 @@ const cacheOnlyReqs = [
     "/src/css/feed.css",
     "/src/css/help.css",
     "/src/images/main-image.jpg",
+    "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
 ];
 
 const trimCache = (cacheName = dynamicRequestsVersion) => {
