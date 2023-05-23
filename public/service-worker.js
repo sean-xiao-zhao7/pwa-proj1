@@ -1,6 +1,7 @@
 importScripts("https://cdn.jsdelivr.net/npm/idb@7/build/umd.js");
+importScripts("/src/js/indexDB_utils.js");
 
-let staticFilesVersion = "staticFiles-v32";
+let staticFilesVersion = "staticFiles-v34";
 let dynamicRequestsVersion = "dynamicRequests-v20";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
@@ -25,14 +26,7 @@ const cacheOnlyReqs = [
     "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
     "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
 ];
-const postsIdb = idb.openDB("dynamicIdbCache", 1, {
-    upgrade(db) {
-        db.createObjectStore("posts", {
-            keyPath: "id",
-            autoIncrement: true,
-        });
-    },
-});
+
 const trimCache = (cacheName = dynamicRequestsVersion) => {
     caches.open(cacheName).then((cache) => {
         cache.keys().then((keys) => {
@@ -43,17 +37,6 @@ const trimCache = (cacheName = dynamicRequestsVersion) => {
             }
         });
     });
-};
-const addToIDB = (res) => {
-    const resClone = res.clone();
-    resClone.json().then((result) => {
-        for (const post of Object.values(result)) {
-            postsIdb.then((dbInstance) => {
-                dbInstance.put("posts", post);
-            });
-        }
-    });
-    return res;
 };
 
 self.addEventListener("install", (event) => {
@@ -88,7 +71,7 @@ self.addEventListener("fetch", (event) => {
         // cache then network with dynamic caching
         event.respondWith(
             fetch(event.request).then((res) => {
-                return addToIDB(res);
+                return putResponseToIDB(res);
             })
         );
     } else if (
@@ -105,7 +88,7 @@ self.addEventListener("fetch", (event) => {
                 } else {
                     return fetch(event.request)
                         .then((res) => {
-                            return addToIDB(res);
+                            return putResponseToIDB(res);
                         })
                         .catch((err) => {
                             console.log(err);
