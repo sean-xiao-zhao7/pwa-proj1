@@ -1,20 +1,33 @@
-let staticFilesVersion = "staticFiles-v16";
-let dynamicRequestsVersion = "dynamicRequests-v16";
+let staticFilesVersion = "staticFiles-v18";
+let dynamicRequestsVersion = "dynamicRequests-v19";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
+    "/",
     "/index.html",
     "/manifest.json",
     "/favicon.ico",
     "/404.html",
-    "/src/js/feed.js",
-    "/src/js/material.min.js",
     "/src/js/app.js",
+    "/src/js/feed.js",
+    "/src/js/fetch_polyfill.js",
+    "/src/js/promise_polyfill.js",
+    "/src/js/material.min.js",
     "/src/css/app.css",
     "/src/css/feed.css",
     "/src/css/help.css",
     "/src/images/main-image.jpg",
+    "https://fonts.googleapis.com/css?family=Roboto:400,700",
+    "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
+    "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
+    "https://fonts.googleapis.com/icon?family=Material+Icons",
+    "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
     "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
 ];
+const myIdb = idb.openDB("dynamicIdbCache", 1, {
+    upgrade(db) {
+        db.createObjectStore("keyval", { keyPath: "id" });
+    },
+});
 
 const trimCache = (cacheName = dynamicRequestsVersion) => {
     caches.open(cacheName).then((cache) => {
@@ -37,16 +50,21 @@ self.addEventListener("install", (event) => {
                 "/manifest.json",
                 "/favicon.ico",
                 "/404.html",
-                "/src/js/feed.js",
-                "/src/js/material.min.js",
                 "/src/js/app.js",
+                "/src/js/feed.js",
+                "/src/js/fetch_polyfill.js",
+                "/src/js/promise_polyfill.js",
+                "/src/js/material.min.js",
                 "/src/css/app.css",
                 "/src/css/feed.css",
                 "/src/css/help.css",
                 "/src/images/main-image.jpg",
                 "https://fonts.googleapis.com/css?family=Roboto:400,700",
+                "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
+                "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
                 "https://fonts.googleapis.com/icon?family=Material+Icons",
                 "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
+                "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
             ]);
         })
     );
@@ -96,8 +114,12 @@ self.addEventListener("fetch", (event) => {
                 } else {
                     return fetch(event.request)
                         .then((res) => {
-                            return idb.openDB("dynamicIdbCache").then((idb) => {
-                                idb.put("keyval", res.clone(), event.request);
+                            return myIdb.then((result) => {
+                                result.put(
+                                    "keyval",
+                                    res.clone(),
+                                    event.request
+                                );
                                 return res;
                             });
                         })
