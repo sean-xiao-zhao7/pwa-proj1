@@ -70,7 +70,6 @@ if ("caches" in window) {
         .then((data) => {
             if (!finished) {
                 finished = true;
-                console.log(cardUrl);
                 createCard(Object.values(data));
             }
         });

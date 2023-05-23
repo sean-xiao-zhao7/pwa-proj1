@@ -1,5 +1,7 @@
-let staticFilesVersion = "staticFiles-v22";
-let dynamicRequestsVersion = "dynamicRequests-v19";
+importScripts("https://cdn.jsdelivr.net/npm/idb@7/build/umd.js");
+
+let staticFilesVersion = "staticFiles-v29";
+let dynamicRequestsVersion = "dynamicRequests-v20";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
     "/",
@@ -23,6 +25,14 @@ const cacheOnlyReqs = [
     "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
     "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
 ];
+const postsIdb = idb.openDB("dynamicIdbCache", 1, {
+    upgrade(db) {
+        db.createObjectStore("posts", {
+            keyPath: "id",
+            autoIncrement: true,
+        });
+    },
+});
 const trimCache = (cacheName = dynamicRequestsVersion) => {
     caches.open(cacheName).then((cache) => {
         cache.keys().then((keys) => {
@@ -66,11 +76,16 @@ self.addEventListener("fetch", (event) => {
     if (event.request.url.indexOf(cardUrl) > -1) {
         // cache then network with dynamic caching
         event.respondWith(
-            caches.open(dynamicRequestsVersion).then((cache) => {
-                return fetch(event.request).then((res2) => {
-                    cache.put(event.request, res2.clone());
-                    return res2;
+            fetch(event.request).then((res) => {
+                const resClone = res.clone();
+                resClone.json().then((result) => {
+                    for (const post of Object.values(result)) {
+                        postsIdb.then((dbInstance) => {
+                            dbInstance.add(post);
+                        });
+                    }
                 });
+                return res;
             })
         );
     } else if (
@@ -87,22 +102,14 @@ self.addEventListener("fetch", (event) => {
                 } else {
                     return fetch(event.request)
                         .then((res) => {
-                            return idb
-                                .openDB("dynamicIdbCache", 1, {
-                                    upgrade(db) {
-                                        db.createObjectStore("keyval", {
-                                            keyPath: "id",
-                                        });
-                                    },
-                                })
-                                .then((result) => {
-                                    result.put(
-                                        "keyval",
-                                        res.clone(),
-                                        event.request
-                                    );
-                                    return res;
-                                });
+                            return postsIdb.then((result) => {
+                                result.put(
+                                    "keyval",
+                                    res.clone(),
+                                    event.request
+                                );
+                                return res;
+                            });
                         })
                         .catch((err) => {
                             console.log(err);
