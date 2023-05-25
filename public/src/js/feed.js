@@ -59,7 +59,7 @@ fetch(cardUrl)
 
 if ("indexedDB" in window) {
     readAllFromIDB().then((results) => {
-        console.log(results);
+        createCard(Object.values(results));
     });
 }
 
