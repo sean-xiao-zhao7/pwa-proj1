@@ -1,7 +1,7 @@
 importScripts("https://cdn.jsdelivr.net/npm/idb@7/build/umd.js");
-importScripts("/src/js/indexDB_utils.js");
+importScripts("/src/js/indexedDB_utils.js");
 
-let staticFilesVersion = "staticFiles-v34";
+let staticFilesVersion = "staticFiles-v40";
 let dynamicRequestsVersion = "dynamicRequests-v20";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
@@ -11,6 +11,7 @@ const cacheOnlyReqs = [
     "/favicon.ico",
     "/404.html",
     "/src/js/app.js",
+    "/src/js/indexedDB_utils.js",
     "/src/js/feed.js",
     "/src/js/fetch_polyfill.js",
     "/src/js/promise_polyfill.js",

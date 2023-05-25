@@ -1,5 +1,3 @@
-const serviceWorkerName = "service-worker";
-
 var shareImageButton = document.querySelector("#share-image-button");
 var createPostArea = document.querySelector("#create-post");
 var closeCreatePostModalButton = document.querySelector(
@@ -59,18 +57,23 @@ fetch(cardUrl)
         }
     });
 
-if ("caches" in window) {
-    caches
-        .match(cardUrl)
-        .then((res) => {
-            if (res) {
-                return res.json();
-            }
-        })
-        .then((data) => {
-            if (!finished) {
-                finished = true;
-                createCard(Object.values(data));
-            }
-        });
+if ("indexedDB" in window) {
+    const results = readAllFromIDB();
+    console.log(results);
 }
+
+// if ("caches" in window) {
+//     caches
+//         .match(cardUrl)
+//         .then((res) => {
+//             if (res) {
+//                 return res.json();
+//             }
+//         })
+//         .then((data) => {
+//             if (!finished) {
+//                 finished = true;
+//                 createCard(Object.values(data));
+//             }
+//         });
+// }
