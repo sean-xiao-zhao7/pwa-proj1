@@ -20,8 +20,8 @@ const putResponseToIDB = (res) => {
 };
 
 const readAllFromIDB = () => {
-    postsIdb.then((dbInstance) => {
-        const result = dbInstance.get("posts");
+    return postsIdb.then((dbInstance) => {
+        const result = dbInstance.getAll("posts");
         return result;
     });
 };

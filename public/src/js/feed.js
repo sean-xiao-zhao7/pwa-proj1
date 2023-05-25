@@ -58,8 +58,9 @@ fetch(cardUrl)
     });
 
 if ("indexedDB" in window) {
-    const results = readAllFromIDB();
-    console.log(results);
+    readAllFromIDB().then((results) => {
+        console.log(results);
+    });
 }
 
 // if ("caches" in window) {
