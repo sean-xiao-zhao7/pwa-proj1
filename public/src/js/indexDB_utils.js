@@ -18,3 +18,10 @@ const putResponseToIDB = (res) => {
     });
     return res;
 };
+
+const readAllFromIDB = () => {
+    postsIdb.then((dbInstance) => {
+        const result = dbInstance.get("posts");
+        return result;
+    });
+};
