@@ -1,7 +1,7 @@
 importScripts("https://cdn.jsdelivr.net/npm/idb@7/build/umd.js");
 importScripts("/src/js/indexedDB_utils.js");
 
-let staticFilesVersion = "staticFiles-v44";
+let staticFilesVersion = "staticFiles-v47";
 let dynamicRequestsVersion = "dynamicRequests-v20";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
@@ -69,14 +69,14 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
     const cardUrl = "https://pwa2-e7438-default-rtdb.firebaseio.com/posts.json";
     if (event.request.url.indexOf(cardUrl) > -1) {
-        // cache then network with dynamic caching
+        // save posts response to indexedDB
         event.respondWith(
             fetch(event.request).then((res) => {
                 return putResponseToIDB(res);
             })
         );
     } else if (
-        cacheOnlyReqs.some((reqStr) => event.request.url.includes(reqStr))
+        cacheOnlyReqs.some((cachedReqStr) => cachedReqStr === event.request.url)
     ) {
         // cache only
         event.respondWith(caches.match(event.request));
@@ -89,7 +89,15 @@ self.addEventListener("fetch", (event) => {
                 } else {
                     return fetch(event.request)
                         .then((res) => {
-                            return putResponseToIDB(res);
+                            return caches
+                                .open(dynamicRequestsVersion)
+                                .then((dynamicCache) => {
+                                    dynamicCache.add(
+                                        event.request,
+                                        res.clone()
+                                    );
+                                    return res;
+                                });
                         })
                         .catch((err) => {
                             console.log(err);
