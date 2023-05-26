@@ -4,6 +4,7 @@ var closeCreatePostModalButton = document.querySelector(
     "#close-create-post-modal-btn"
 );
 var sharedMomentsArea = document.querySelector("#shared-moments");
+var postBtn = document.querySelector("#post-btn");
 
 function openCreatePostModal() {
     createPostArea.style.display = "block";
@@ -19,6 +20,11 @@ function closeCreatePostModal() {
 shareImageButton.addEventListener("click", openCreatePostModal);
 
 closeCreatePostModalButton.addEventListener("click", closeCreatePostModal);
+
+postBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    closeCreatePostModal();
+});
 
 function createCard(data) {
     for (const post of data) {
