@@ -32,3 +32,9 @@ const readAllFromIDB = () => {
         return result;
     });
 };
+
+const writePostToIDB = (post) => {
+    return postsIdb.then((dbInstance) => {
+        dbInstance.put("posts", post);
+    });
+};

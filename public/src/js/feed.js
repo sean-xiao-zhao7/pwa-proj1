@@ -26,10 +26,16 @@ postBtn.addEventListener("click", (event) => {
     // get title/location of new post
     const titleValue = document.querySelector("#title").value;
     const locationValue = document.querySelector("#location").value;
+    const id = new Date().toISOString();
 
     // setup background sync using SW
     if ("serviceWorker" in navigator && "SyncManager" in window) {
-        navigator.serviceWorker.ready().then((sw) => {
+        navigator.serviceWorker.ready.then((sw) => {
+            writePostToIDB({
+                title: titleValue,
+                location: locationValue,
+                id: id,
+            });
             sw.sync.register("create-post");
         });
     }
