@@ -46,6 +46,8 @@ postBtn.addEventListener("click", (event) => {
                     alert(err.message);
                 });
         });
+    } else {
+        alert("SyncManager is not available.");
     }
 
     closeCreatePostModal();
