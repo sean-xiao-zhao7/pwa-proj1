@@ -1,7 +1,7 @@
 importScripts("https://cdn.jsdelivr.net/npm/idb@7/build/umd.js");
 importScripts("/src/js/indexedDB_utils.js");
 
-let staticFilesVersion = "staticFiles-v47";
+let staticFilesVersion = "staticFiles-v48";
 let dynamicRequestsVersion = "dynamicRequests-v20";
 const dynamicCacheMaxItems = 5;
 const cacheOnlyReqs = [
