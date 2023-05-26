@@ -118,3 +118,9 @@ self.addEventListener("fetch", (event) => {
         );
     }
 });
+
+self.addEventListener("sync", (event) => {
+    if (event.tag === "create-post") {
+        event.waitUntil();
+    }
+});
