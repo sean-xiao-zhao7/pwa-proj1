@@ -35,8 +35,16 @@ postBtn.addEventListener("click", (event) => {
                 title: titleValue,
                 location: locationValue,
                 id: id,
-            });
-            sw.sync.register("create-post");
+            })
+                .then(() => {
+                    return sw.sync.register("create-post");
+                })
+                .then(() => {
+                    alert("Create post sync registered.");
+                })
+                .catch((err) => {
+                    alert(err.message);
+                });
         });
     }
 
