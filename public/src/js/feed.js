@@ -23,6 +23,17 @@ closeCreatePostModalButton.addEventListener("click", closeCreatePostModal);
 
 postBtn.addEventListener("click", (event) => {
     event.preventDefault();
+    // get title/location of new post
+    const titleValue = document.querySelector("#title").value;
+    const locationValue = document.querySelector("#location").value;
+
+    // setup background sync using SW
+    if ("serviceWorker" in navigator && "SyncManager" in window) {
+        navigator.serviceWorker.ready().then((sw) => {
+            sw.sync.register("create-post");
+        });
+    }
+
     closeCreatePostModal();
 });
 
