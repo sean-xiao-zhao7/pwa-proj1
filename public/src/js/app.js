@@ -4,6 +4,8 @@ if (!window.Promise) {
     window.Promise = Promise;
 }
 
+// service worker
+
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker
         .register("/service-worker.js")
@@ -22,12 +24,25 @@ window.addEventListener("beforeinstallprompt", (event) => {
     return false;
 });
 
+// notifications
+
 const enableNotificationsButtons = document.querySelectorAll(
     ".enable-notifications"
 );
 
+const promptNotfiyPermission = () => {
+    Notification.requestPermission((result) => {
+        if (result !== "granted") {
+            alert("Notification denied.");
+        } else {
+            
+        }
+    });
+};
+
 if ("Notification" in window) {
     for (const button of enableNotificationsButtons) {
         button.style.display = "inline-block";
+        button.addEventListener("click", promptNotfiyPermission);
     }
 }
