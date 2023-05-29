@@ -46,6 +46,9 @@ const displayExampleNotify = () => {
             const options = {
                 body: "Service worker used.",
                 icon: "/src/images/icons/app-icon-96x96.png",
+                image: "/src/images/sf-boat.jpg",
+                dir: "ltr",
+                lang: "en-US",
             };
             // new Notification("Notification enabled.", options);
             sw.showNotification("Notification enabled.", options);
