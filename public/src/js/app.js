@@ -25,3 +25,9 @@ window.addEventListener("beforeinstallprompt", (event) => {
 const enableNotificationsButtons = document.querySelectorAll(
     ".enable-notifications"
 );
+
+if ("Notification" in window) {
+    for (const button of enableNotificationsButtons) {
+        button.style.display = "inline-block";
+    }
+}
