@@ -53,7 +53,7 @@ const displayExampleNotify = () => {
                 tag: "example-notify",
                 actions: [
                     {
-                        action: "confirm",
+                        action: "closeExample",
                         title: "Close example",
                         icon: iconUrl,
                     },

@@ -124,3 +124,5 @@ self.addEventListener("sync", (event) => {
         event.waitUntil();
     }
 });
+
+self.addEventListener("notificationclick", (event) => {});
