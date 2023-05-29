@@ -21,3 +21,7 @@ window.addEventListener("beforeinstallprompt", (event) => {
     addHomePromptEvent = event;
     return false;
 });
+
+const enableNotificationsButtons = document.querySelectorAll(
+    ".enable-notifications"
+);
