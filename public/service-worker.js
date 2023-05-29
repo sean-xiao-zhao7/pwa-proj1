@@ -125,4 +125,10 @@ self.addEventListener("sync", (event) => {
     }
 });
 
-self.addEventListener("notificationclick", (event) => {});
+self.addEventListener("notificationclick", (event) => {
+    event.notification.close();
+});
+
+self.addEventListener("notificationclose", (event) => {
+    event.notification.close();
+});
