@@ -30,7 +30,17 @@ const enableNotificationsButtons = document.querySelectorAll(
     ".enable-notifications"
 );
 
-const preparePushSub = () => {};
+const preparePushSub = () => {
+    navigator.serviceWorker.ready
+        .then((sw) => {
+            return sw.pushManager.getSubscription();
+        })
+        .then((subs) => {
+            if (!subs) {
+                
+            }
+        });
+};
 
 const promptNotfiyPermission = () => {
     if ("serviceWorker" in navigator) {
