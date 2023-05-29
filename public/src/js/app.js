@@ -35,9 +35,13 @@ const promptNotfiyPermission = () => {
         if (result !== "granted") {
             alert("Notification denied.");
         } else {
-            
+            displayExampleNotify();
         }
     });
+};
+
+const displayExampleNotify = () => {
+    new Notification("Notification enabled.");
 };
 
 if ("Notification" in window) {
