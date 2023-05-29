@@ -41,10 +41,15 @@ const promptNotfiyPermission = () => {
 };
 
 const displayExampleNotify = () => {
-    const options = {
-        body: "Nice.",
-    };
-    new Notification("Notification enabled.", options);
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.ready.then((sw) => {
+            const options = {
+                body: "Service worker used.",
+            };
+            // new Notification("Notification enabled.", options);
+            sw.showNotification("Notification enabled.", options);
+        });
+    }
 };
 
 if ("Notification" in window) {
