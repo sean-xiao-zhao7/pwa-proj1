@@ -45,6 +45,7 @@ const displayExampleNotify = () => {
         navigator.serviceWorker.ready.then((sw) => {
             const options = {
                 body: "Service worker used.",
+                icon: "/src/images/icons/app-icon-96x96.png",
             };
             // new Notification("Notification enabled.", options);
             sw.showNotification("Notification enabled.", options);
