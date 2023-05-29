@@ -41,7 +41,10 @@ const promptNotfiyPermission = () => {
 };
 
 const displayExampleNotify = () => {
-    new Notification("Notification enabled.");
+    const options = {
+        body: "Nice.",
+    };
+    new Notification("Notification enabled.", options);
 };
 
 if ("Notification" in window) {
