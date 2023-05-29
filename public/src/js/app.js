@@ -42,13 +42,22 @@ const promptNotfiyPermission = () => {
 
 const displayExampleNotify = () => {
     if ("serviceWorker" in navigator) {
+        const iconUrl = "/src/images/icons/app-icon-96x96.png";
         navigator.serviceWorker.ready.then((sw) => {
             const options = {
                 body: "Service worker used.",
-                icon: "/src/images/icons/app-icon-96x96.png",
+                icon: iconUrl,
                 image: "/src/images/sf-boat.jpg",
                 dir: "ltr",
                 lang: "en-US",
+                tag: "example-notify",
+                actions: [
+                    {
+                        action: "confirm",
+                        title: "Close example",
+                        icon: iconUrl,
+                    },
+                ],
             };
             // new Notification("Notification enabled.", options);
             sw.showNotification("Notification enabled.", options);
