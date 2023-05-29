@@ -129,6 +129,4 @@ self.addEventListener("notificationclick", (event) => {
     event.notification.close();
 });
 
-self.addEventListener("notificationclose", (event) => {
-    event.notification.close();
-});
+self.addEventListener("notificationclose", (event) => {});

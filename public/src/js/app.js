@@ -30,42 +30,45 @@ const enableNotificationsButtons = document.querySelectorAll(
     ".enable-notifications"
 );
 
-const promptNotfiyPermission = () => {
-    Notification.requestPermission((result) => {
-        if (result !== "granted") {
-            alert("Notification denied.");
-        } else {
-            displayExampleNotify();
-        }
-    });
-};
+const preparePushSub = () => {};
 
-const displayExampleNotify = () => {
+const promptNotfiyPermission = () => {
     if ("serviceWorker" in navigator) {
-        const iconUrl = "/src/images/icons/app-icon-96x96.png";
-        navigator.serviceWorker.ready.then((sw) => {
-            const options = {
-                body: "Service worker used.",
-                icon: iconUrl,
-                image: "/src/images/sf-boat.jpg",
-                dir: "ltr",
-                lang: "en-US",
-                tag: "example-notify",
-                actions: [
-                    {
-                        action: "closeExample",
-                        title: "Close example",
-                        icon: iconUrl,
-                    },
-                ],
-            };
-            // new Notification("Notification enabled.", options);
-            sw.showNotification("Notification enabled.", options);
+        Notification.requestPermission((result) => {
+            if (result !== "granted") {
+                alert("Notification denied.");
+            } else {
+                // displayExampleNotify();
+                preparePushSub();
+            }
         });
     }
 };
 
-if ("Notification" in window) {
+const displayExampleNotify = () => {
+    const iconUrl = "/src/images/icons/app-icon-96x96.png";
+    navigator.serviceWorker.ready.then((sw) => {
+        const options = {
+            body: "Service worker used.",
+            icon: iconUrl,
+            image: "/src/images/sf-boat.jpg",
+            dir: "ltr",
+            lang: "en-US",
+            tag: "example-notify",
+            actions: [
+                {
+                    action: "closeExample",
+                    title: "Close example",
+                    icon: iconUrl,
+                },
+            ],
+        };
+        // new Notification("Notification enabled.", options);
+        sw.showNotification("Notification enabled.", options);
+    });
+};
+
+if ("Notification" in window && "serviceWorker" in navigator) {
     for (const button of enableNotificationsButtons) {
         button.style.display = "inline-block";
         button.addEventListener("click", promptNotfiyPermission);
