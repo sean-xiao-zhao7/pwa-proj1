@@ -30,19 +30,27 @@ const enableNotificationsButtons = document.querySelectorAll(
     ".enable-notifications"
 );
 
-const enc = new TextEncoder();
-const vpkBuf = enc.encode(
-    "BKHNSp-L3vWlTDXFPVNlbRr4SMSTcyWdy7yndSrpqTwBh_npketBjdu_yXrKVf0DugqpVGx-Hbha1dzxtPypBaE"
-);
 const preparePushSub = () => {
     navigator.serviceWorker.ready.then((sw) => {
-        sw.pushManager.getSubscription().then((subs) => {
-            if (!subs) {
-                sw.pushManager.subscribe({
-                    userVisibleOnly: true,
-                });
-            }
-        });
+        sw.pushManager
+            .getSubscription()
+            .then((subs) => {
+                if (!subs) {
+                    const enc = new TextEncoder();
+                    const vpkBuf = enc.encode(
+                        "BKHNSp-L3vWlTDXFPVNlbRr4SMSTcyWdy7yndSrpqTwBh_npketBjdu_yXrKVf0DugqpVGx-Hbha1dzxtPypBaE"
+                    );
+                    return sw.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: vpkBuf,
+                    });
+                }
+            })
+            .then((sub) => {
+                if (sub) {
+                    // send to backend
+                }
+            });
     });
 };
 
