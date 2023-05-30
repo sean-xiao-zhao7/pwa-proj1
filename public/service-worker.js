@@ -127,6 +127,15 @@ self.addEventListener("sync", (event) => {
 });
 
 self.addEventListener("notificationclick", (event) => {
+    if (event.action === "closeExample") {
+        event.notification.close();
+    } else {
+        event.waitUntil(
+            clients.matchAll().then((clis) => {
+                const cli = clis.find((c) => c.visibilityState === "visible");
+            })
+        );
+    }
     event.notification.close();
 });
 
