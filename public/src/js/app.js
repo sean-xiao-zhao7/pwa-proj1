@@ -30,6 +30,9 @@ const enableNotificationsButtons = document.querySelectorAll(
     ".enable-notifications"
 );
 
+const vpkBuf = Buffer.from(
+    "BKHNSp-L3vWlTDXFPVNlbRr4SMSTcyWdy7yndSrpqTwBh_npketBjdu_yXrKVf0DugqpVGx-Hbha1dzxtPypBaE"
+);
 const preparePushSub = () => {
     navigator.serviceWorker.ready.then((sw) => {
         sw.pushManager.getSubscription().then((subs) => {
