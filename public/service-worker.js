@@ -133,6 +133,8 @@ self.addEventListener("notificationclick", (event) => {
         event.waitUntil(
             clients.matchAll().then((clis) => {
                 const cli = clis.find((c) => c.visibilityState === "visible");
+                cli.navigate(event.notification.data.openUrl);
+                cli.focus();
             })
         );
     }
@@ -150,6 +152,9 @@ self.addEventListener("push", (event) => {
         dir: "ltr",
         lang: "en-US",
         tag: "example-push-notify",
+        data: {
+            openUrl: serverData.url,
+        },
     };
     event.waitUntil(
         self.regsitration.showNotification(serverData.title, options)
