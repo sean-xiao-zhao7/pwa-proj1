@@ -1,4 +1,5 @@
 let addHomePromptEvent;
+const iconUrl = "/src/images/icons/app-icon-96x96.png";
 
 if (!window.Promise) {
     window.Promise = Promise;
@@ -68,7 +69,6 @@ const promptNotfiyPermission = () => {
 };
 
 const displayExampleNotify = () => {
-    const iconUrl = "/src/images/icons/app-icon-96x96.png";
     navigator.serviceWorker.ready.then((sw) => {
         const options = {
             body: "Service worker used.",

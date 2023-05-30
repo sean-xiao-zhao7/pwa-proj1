@@ -25,6 +25,7 @@ const cacheOnlyReqs = [
     "https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
     "https://cdn.jsdelivr.net/npm/idb@7/build/umd.js",
 ];
+const iconUrl = "/src/images/icons/app-icon-96x96.png";
 
 const trimCache = (cacheName = dynamicRequestsVersion) => {
     caches.open(cacheName).then((cache) => {
@@ -130,3 +131,18 @@ self.addEventListener("notificationclick", (event) => {
 });
 
 self.addEventListener("notificationclose", (event) => {});
+
+self.addEventListener("push", (event) => {
+    const serverData = JSON.parse(event.data.text());
+    const options = {
+        body: serverData.content,
+        icon: iconUrl,
+        badge: iconUrl,
+        dir: "ltr",
+        lang: "en-US",
+        tag: "example-push-notify",
+    };
+    event.waitUntil(
+        self.regsitration.showNotification(serverData.title, options)
+    );
+});
