@@ -13,6 +13,17 @@
     transition: transform 0.3s;
 }
 
+#create-post video,
+#create-post canvas {
+    width: 100%;
+    display: none;
+    margin: auto;
+}
+
+#create-post #pick-image {
+    display: none;
+}
+
 .main-image {
     max-width: 100%;
     margin: auto;
