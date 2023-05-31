@@ -31,7 +31,6 @@ const prepareMedia = () => {
             }
         };
     }
-
     navigator.mediaDevices
         .getUserMedia({ video: true })
         .then((stream) => {
@@ -49,6 +48,7 @@ function openCreatePostModal() {
     setTimeout(() => {
         createPostArea.style.transform = "translateY(0)";
     }, 1);
+    prepareMedia();
 }
 
 function closeCreatePostModal() {
