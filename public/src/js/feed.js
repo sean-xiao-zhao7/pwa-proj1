@@ -12,7 +12,7 @@ const imagePicker = document.querySelector("#image-picker");
 const imagePickerInput = document.querySelector("#image-picker-input");
 const getLocationButton = document.querySelector("#get-location-button");
 const locationLoader = document.querySelector("#location-loader");
-const locationContainer = document.querySelector(".location-container");
+const locationContainer = document.querySelector("#location-container");
 
 // image/video
 const prepareMedia = () => {
@@ -82,7 +82,7 @@ imagePickerInput.addEventListener("change", (_) => {
 // location
 getLocationButton.addEventListener("click", (event) => {
     getLocationButton.style.display = "none";
-    locationLoader.style.display = "block";
+    locationLoader.style.display = "inline-block";
     if ("geolocation" in navigator) {
         const geolocation = navigator.geolocation;
         geolocation.getCurrentPosition((position) => {
@@ -106,6 +106,8 @@ function closeCreatePostModal() {
     videoEl.style.display = "none";
     imagePicker.style.display = "none";
     canvasEl.style.display = "none";
+    getLocationButton.style.display = "inline";
+    locationContainer.textContent = "";
 }
 
 shareImageButton.addEventListener("click", openCreatePostModal);
