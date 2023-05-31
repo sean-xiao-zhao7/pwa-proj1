@@ -6,6 +6,12 @@ var closeCreatePostModalButton = document.querySelector(
 var sharedMomentsArea = document.querySelector("#shared-moments");
 var postBtn = document.querySelector("#post-btn");
 
+// video
+const videoEl = document.querySelector("#player");
+const canvasEl = document.querySelector("#canvas");
+const captureButton = document.querySelector("#capture-button");
+const imagePickerInput = document.querySelector("#image-picker-input");
+
 function openCreatePostModal() {
     createPostArea.style.display = "block";
     setTimeout(() => {
