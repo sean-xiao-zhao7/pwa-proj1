@@ -10,7 +10,30 @@ var postBtn = document.querySelector("#post-btn");
 const videoEl = document.querySelector("#player");
 const canvasEl = document.querySelector("#canvas");
 const captureButton = document.querySelector("#capture-button");
+const imagePicker = document.querySelector("#image-picker");
 const imagePickerInput = document.querySelector("#image-picker-input");
+
+const prepareMedia = () => {
+    if (!("mediaDevices" in navigator)) {
+        navigator.mediaDevices = {};
+    }
+
+    if (!("getUserMedia" in navigator.mediaDevices)) {
+        navigator.mediaDevices.getUserMedia = (constraints) => {
+            const getUserMedia =
+                navigator.webkitGerUserMedia || navigator.mozGetUserMedia;
+            if (!getUserMedia) {
+                return Promise.reject(new Error("getUserMedia not available."));
+            } else {
+                return new Promise((resolve, reject) => {
+                    getUserMedia.call(navigator, constraints, resolve, reject);
+                });
+            }
+        };
+    }
+
+    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {});
+};
 
 function openCreatePostModal() {
     createPostArea.style.display = "block";
