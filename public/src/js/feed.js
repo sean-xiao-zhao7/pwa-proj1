@@ -5,14 +5,16 @@ var closeCreatePostModalButton = document.querySelector(
 );
 var sharedMomentsArea = document.querySelector("#shared-moments");
 var postBtn = document.querySelector("#post-btn");
-
-// video
 const videoEl = document.querySelector("#player");
 const canvasEl = document.querySelector("#canvas");
 const captureButton = document.querySelector("#capture-button");
 const imagePicker = document.querySelector("#image-picker");
 const imagePickerInput = document.querySelector("#image-picker-input");
+const getLocationButton = document.querySelector("#get-location-button");
+const locationLoader = document.querySelector("#location-loader");
+const locationContainer = document.querySelector(".location-container");
 
+// image/video
 const prepareMedia = () => {
     if (!("mediaDevices" in navigator)) {
         navigator.mediaDevices = {};
@@ -77,6 +79,20 @@ imagePickerInput.addEventListener("change", (_) => {
     reader.readAsDataURL(imageFile);
 });
 
+// location
+getLocationButton.addEventListener("click", (event) => {
+    getLocationButton.style.display = "none";
+    locationLoader.style.display = "block";
+    if ("geolocation" in navigator) {
+        const geolocation = navigator.geolocation;
+        geolocation.getCurrentPosition((position) => {
+            console.log(position.coords);
+            locationLoader.style.display = "none";
+            locationContainer.textContent = `Lat: ${position.coords.latitude}, Long: ${position.coords.longitude}`;
+        });
+    }
+});
+
 function openCreatePostModal() {
     createPostArea.style.display = "block";
     setTimeout(() => {
@@ -93,7 +109,6 @@ function closeCreatePostModal() {
 }
 
 shareImageButton.addEventListener("click", openCreatePostModal);
-
 closeCreatePostModalButton.addEventListener("click", closeCreatePostModal);
 
 postBtn.addEventListener("click", (event) => {

@@ -24,6 +24,11 @@
     display: none;
 }
 
+/* location */
+#location-loader {
+    display: none;
+}
+
 .main-image {
     max-width: 100%;
     margin: auto;
