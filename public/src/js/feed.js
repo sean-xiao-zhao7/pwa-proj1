@@ -43,6 +43,23 @@ const prepareMedia = () => {
         });
 };
 
+captureButton.addEventListener("click", (event) => {
+    canvasEl.style.display = "block";
+    videoEl.style.display = "none";
+    captureButton.style.display = "none";
+    const context = canvasEl.getContext("2d");
+    context.drawImage(
+        videoEl,
+        0,
+        0,
+        canvasEl.width,
+        videoEl.videoHeight / (videoEl.videoWidth / canvasEl.width)
+    );
+    videoEl.srcObject.getVideoTracks().forEach((track) => {
+        track.stop();
+    });
+});
+
 function openCreatePostModal() {
     createPostArea.style.display = "block";
     setTimeout(() => {
