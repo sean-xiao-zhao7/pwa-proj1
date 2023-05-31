@@ -62,14 +62,17 @@ captureButton.addEventListener("click", (event) => {
 
 imagePickerInput.addEventListener("change", (_) => {
     imagePicker.style.display = "none";
+    canvasEl.style.display = "block";
 
     const imageFile = imagePickerInput.files[0];
     const reader = new FileReader();
     reader.onload = (e) => {
         const img = new Image();
+        img.addEventListener("load", () => {
+            const context = canvasEl.getContext("2d");
+            context.drawImage(img, 0, 0, 20, 20);
+        });
         img.src = e.target.result;
-        const context = canvasEl.getContext("2d");
-        context.drawImage(img, 0, 0, canvasEl.width, canvasEl.height);
     };
     reader.readAsDataURL(imageFile);
 });
